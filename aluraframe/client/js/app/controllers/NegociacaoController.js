@@ -1,40 +1,35 @@
 class NegociacaoController {
 
     constructor() {
-        let $ = document.querySelector.bind(document); //poupara digitação, não precisará repetir o código
 
+        let $ = document.querySelector.bind(document);
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
+        this._listaNegociacoes = new ListaNegociacoes();
     }
+
     adiciona(event) {
+
         event.preventDefault();
 
-        //formas de converter o formato da data
-        // let data = new Date(this._inputData.value.split('-'));
+        this._listaNegociacoes.adiciona(this._criaNegociacao());
+        this._limpaFormulario();
+        this._listaNegociacoes.negociacoes.length = 0;
+        console.log(this._listaNegociacoes.negociacoes);
+    }
 
-        // let data = new Date(this._inputData.value.replace(/-/g, ','));
+    _criaNegociacao() {
 
-        // let data = new Date(...
-        //     this._inputData.value
-        //     .split('-')
-        //     .map(function (item, indice) {
-        //        return item - indice % 2;
-        //     })
-        // );
-
-        let data = new Date(...
-            this._inputData.value //string
-            .split('-') //array
-            .map((item, indice) => item - indice % 2) //arrow function
+        return new Negociacao(
+            DateHelper.textoParaData(this._inputData.value),
+            this._inputQuantidade.value,
+            this._inputValor.value
         );
+    }
 
-        let negociacao = new Negociacao(
-            data,
-            this._inputQuantidade,
-            this._inputValor
-        );
-
-      
+    _limpaFormulario() {
+        document.querySelector(".form").reset();
+        this._inputData.focus();
     }
 }
